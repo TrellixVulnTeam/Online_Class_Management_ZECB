@@ -112,6 +112,20 @@ class ClassAssignment(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+
+class ClassMaterial(models.Model):
+    student = models.ManyToManyField(Student,related_name='student_material')
+    teacher = models.ForeignKey(Teacher,related_name='teacher_material',on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now=True)
+    material_name = models.CharField(max_length=250)
+    material = models.FileField(upload_to='materials')
+
+    def __str__(self):
+        return self.material_name
+
+    class Meta:
+        ordering = ['-created_at']
+
 class LiveClass(models.Model):
     student = models.ManyToManyField(Student,related_name='student_liveClass')
     teacher = models.ForeignKey(Teacher,related_name='teacher_liveClass',on_delete=models.CASCADE, default=None)
@@ -122,6 +136,21 @@ class LiveClass(models.Model):
     EndTime = models.DateTimeField(auto_now=False, null=True)
     def __str__(self):
         return self.ClassName
+
+    class Meta:
+        ordering = ['-created_at']
+
+
+class ClassTest(models.Model):
+    student = models.ManyToManyField(Student,related_name='student_ClassTest')
+    teacher = models.ForeignKey(Teacher,related_name='teacher_ClassTest',on_delete=models.CASCADE, default=None)
+    created_at = models.DateTimeField(auto_now=True)
+    TestName = models.CharField(max_length=250)
+    StartTime = models.DateTimeField(auto_now=False, null=True)
+    EndTime = models.DateTimeField(auto_now=False, null=True)
+    Testlink = models.CharField(max_length=250)
+    def __str__(self):
+        return self.TestName
 
     class Meta:
         ordering = ['-created_at']

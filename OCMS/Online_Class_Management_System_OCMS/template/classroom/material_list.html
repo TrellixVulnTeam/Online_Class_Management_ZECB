@@ -14,31 +14,29 @@
 
 <div class="container">
   <div class="jumbotron">
-{% if teacher.teacher_assignment.count == 0 %}
-  <h2>No Assignments Uploaded Yet</h2>
+{% if teacher.teacher_material.count == 0 %}
+  <h2>No Study Material / Lecture Uploaded Yet</h2>
 {% else %}
   <table class="table">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Assignment Name</th>
+        <th scope="col">Name</th>
         <th scope="col">Uploaded At</th>
-        <th scope="col">Deadline </th>
         <th scope="col">Download</th>
         <th scope="col">Update</th>
         <th scope="col">Delete</th>
       </tr>
     </thead>
     <tbody>
-      {% for assignment in teacher.teacher_assignment.all %}
+      {% for material in teacher.teacher_material.all %}
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
-          <td>{{ assignment.assignment_name }}</td>
-          <td>{{ assignment.PublishedAt }}</td>
-          <td>{{ assignment.Deadline }}</td>
-          <td><a href="{{ assignment.assignment.url }}" class="btn btn-primary" target="_blank">Download</a></td>
-          <td><a href="{% url 'classroom:update_assignment' id=assignment.id %}" class="btn btn-primary">Update</a></td>
-          <td><a href="{% url 'classroom:assignment_delete' id=assignment.id %}" class="btn btn-danger">Delete</a></td>
+          <td>{{ material.material_name }}</td>
+          <td>{{ material.created_at }}</td>
+          <td><a href="{{ material.material.url }}" class="btn btn-primary" target="_blank">Download</a></td>
+          <td><a href="{% url 'classroom:update_material' id=material.id %}" class="btn btn-primary">Update</a></td>
+          <td><a href="{% url 'classroom:material_delete' id=material.id %}" class="btn btn-danger">Delete</a></td>
         </tr>
       {% endfor %}
     </tbody>

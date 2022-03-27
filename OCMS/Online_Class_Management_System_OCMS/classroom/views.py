@@ -9,17 +9,17 @@ from django.views.generic import (View, TemplateView,
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from Online_Class_Management_System_OCMS.classroom.models import LiveClass
+
 
 
 # Create your views here.
-from classroom.forms import UserForm, TeacherProfileForm, StudentProfileForm, MarksForm, MessageForm, NoticeForm, AssignmentForm, SubmitForm, TeacherProfileUpdateForm, StudentProfileUpdateForm, LiveClassForm
+from classroom.forms import UserForm, TeacherProfileForm, StudentProfileForm, MarksForm, MessageForm, NoticeForm, AssignmentForm, SubmitForm, TeacherProfileUpdateForm, StudentProfileUpdateForm, LiveClassForm, ClassTestForm, MaterialForm
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpResponseRedirect, HttpResponse
 from classroom import models
-from classroom.models import StudentsInClass, StudentMarks, ClassAssignment, SubmitAssignment, Student, Teacher, LiveClass
+from classroom.models import StudentsInClass, StudentMarks, ClassAssignment, SubmitAssignment, Student, Teacher, LiveClass, ClassTest, ClassMaterial
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
 from . import liveclass
@@ -407,6 +407,28 @@ def upload_assignment(request):
         form = AssignmentForm()
     return render(request, 'classroom/upload_assignment.html', {'form': form, 'assignment_uploaded': assignment_uploaded})
 
+
+# Teacher uploading assignment.
+@login_required
+def upload_material(request):
+    material_uploaded = False
+    teacher = request.user.Teacher
+    students = Student.objects.filter(
+        user_student_name__teacher=request.user.Teacher)
+    if request.method == 'POST':
+        form = MaterialForm(request.POST, request.FILES)
+        if form.is_valid():
+            upload = form.save(commit=False)
+            upload.teacher = teacher
+            students = Student.objects.filter(
+                user_student_name__teacher=request.user.Teacher)
+            upload.save()
+            upload.student.add(*students)
+            material_uploaded = True
+    else:
+        form = MaterialForm()
+    return render(request, 'classroom/upload_material.html', {'form': form, 'material_uploaded': material_uploaded})
+
 # Teacher live class.
 
 
@@ -422,7 +444,7 @@ def schedule_class(request):
             liveclass.getUsers()
             # print(form.fields['Classlink'])
             upload = form.save(commit=False)
-            upload.Classlink = liveclass.createMeeting()
+            upload.Classlink = liveclass.createMeeting(str(form.fields['ClassName']))
             upload.teacher = teacher
             students = Student.objects.filter(user_student_name__teacher=request.user.Teacher)
             upload.save()
@@ -431,6 +453,29 @@ def schedule_class(request):
     else:
         form = LiveClassForm()
     return render(request, 'classroom/live_class.html', {'form': form, 'class_scheduled': class_scheduled})
+
+
+# Teacher live class.
+
+
+@login_required
+def schedule_test(request):
+    test_scheduled = False
+    teacher = request.user.Teacher
+    students = Student.objects.filter(
+        user_student_name__teacher=request.user.Teacher)
+    if request.method == 'POST':
+        form = ClassTestForm(request.POST, request.FILES)
+        if form.is_valid():
+            upload = form.save(commit=False)
+            upload.teacher = teacher
+            students = Student.objects.filter(user_student_name__teacher=request.user.Teacher)
+            upload.save()
+            upload.student.add(*students)
+            test_scheduled = True
+    else:
+        form = ClassTestForm()
+    return render(request, 'classroom/class_test.html', {'form': form, 'test_scheduled': test_scheduled})
 
 # Students getting the list of all the assignments uploaded by their teacher.
 
@@ -456,6 +501,24 @@ def class_assignment(request):
 
 
 @login_required
+def class_material(request):
+    student = request.user.Student
+    currentDateTime = datetime.datetime.now()
+    # assignments = [
+    #     assign
+    #     for assign in assignments
+    #     if str(assign.submitted_assignment.PublishedAt) > currentDateTime
+    # ]
+    # for assign in assignments:
+    #     print(assign.submitted_assignment.PublishedAt)
+    #     print(currentDateTime)
+
+    return render(request, 'classroom/class_material.html', {'student': student, 'currentDateTime': currentDateTime})
+
+# Students getting the list of all the assignments uploaded by their teacher.
+
+
+@login_required
 def class_liveClass(request):
     student = request.user.Student
     # assignments = SubmitAssignment.objects.filter(student=student)
@@ -472,6 +535,27 @@ def class_liveClass(request):
     # assignment_list = [x.submitted_assignment for x in assignments]
     return render(request, 'classroom/class_liveClass.html', {'student': student, 'currentDateTime': currentDateTime})
 
+
+# Students getting the list of all the assignments uploaded by their teacher.
+
+
+@login_required
+def class_classTest(request):
+    student = request.user.Student
+    # assignments = SubmitAssignment.objects.filter(student=student)
+    currentDateTime = datetime.datetime.now()
+    # assignments = [
+    #     assign
+    #     for assign in assignments
+    #     if str(assign.submitted_assignment.PublishedAt) > currentDateTime
+    # ]
+    # for assign in assignments:
+    #     print(assign.submitted_assignment.PublishedAt)
+    #     print(currentDateTime)
+
+    # assignment_list = [x.submitted_assignment for x in assignments]
+    return render(request, 'classroom/class_classTest.html', {'student': student, 'currentDateTime': currentDateTime})
+
 # List of all the assignments uploaded by the teacher himself.
 
 
@@ -479,6 +563,14 @@ def class_liveClass(request):
 def assignment_list(request):
     teacher = request.user.Teacher
     return render(request, 'classroom/assignment_list.html', {'teacher': teacher})
+
+# List of all the assignments uploaded by the teacher himself.
+
+
+@login_required
+def material_list(request):
+    teacher = request.user.Teacher
+    return render(request, 'classroom/material_list.html', {'teacher': teacher})
 
 
 # List of all the assignments uploaded by the teacher himself.
@@ -488,6 +580,15 @@ def assignment_list(request):
 def liveClass_list(request):
     teacher = request.user.Teacher
     return render(request, 'classroom/liveClass_list.html', {'teacher': teacher})
+
+
+# List of all the assignments uploaded by the teacher himself.
+
+
+@login_required
+def classTest_list(request):
+    teacher = request.user.Teacher
+    return render(request, 'classroom/classTest_list.html', {'teacher': teacher})
 
 # For updating the assignments later.
 
@@ -508,6 +609,28 @@ def update_assignment(request, id=None):
             request, "Updated Assignment".format(obj.assignment_name))
         return redirect('classroom:assignment_list')
     template = "classroom/update_assignment.html"
+    return render(request, template, context)
+
+
+# For updating the assignments later.
+
+
+@login_required
+def update_material(request, id=None):
+    obj = get_object_or_404(ClassMaterial, id=id)
+    form = MaterialForm(request.POST or None, instance=obj)
+    context = {
+        "form": form
+    }
+    if form.is_valid():
+        obj = form.save(commit=False)
+        if 'material' in request.FILES:
+            obj.material = request.FILES['material']
+        obj.save()
+        messages.success(
+            request, "Updated Study Material/ Lectures".format(obj.material_name))
+        return redirect('classroom:material_list')
+    template = "classroom/update_material.html"
     return render(request, template, context)
 
 # For deleting the assignment.
@@ -531,16 +654,52 @@ def assignment_delete(request, id=None):
 
 
 @login_required
+def material_delete(request, id=None):
+    obj = get_object_or_404(ClassMaterial, id=id)
+    if request.method == "POST":
+        obj.delete()
+        messages.success(request, "Study Material/ Lectures Removed")
+        return redirect('classroom:material_list')
+    context = {
+        "object": obj,
+    }
+    template = "classroom/material_delete.html"
+    return render(request, template, context)
+
+
+# For deleting the assignment.
+
+
+@login_required
 def liveClass_delete(request, id=None):
     obj = get_object_or_404(LiveClass, id=id)
     if request.method == "POST":
         obj.delete()
         messages.success(request, "Class deleted successfully")
         return redirect('classroom:liveClass_list')
+        
     context = {
         "object": obj,
     }
     template = "classroom/liveClass_delete.html"
+    return render(request, template, context)
+
+
+# For deleting the assignment.
+
+
+@login_required
+def classTest_delete(request, id=None):
+    obj = get_object_or_404(ClassTest, id=id)
+    if request.method == "POST":
+        obj.delete()
+        messages.success(request, "Test deleted successfully")
+        return redirect('classroom:classTest_list')
+        
+    context = {
+        "object": obj,
+    }
+    template = "classroom/classTest_delete.html"
     return render(request, template, context)
 
 # For students submitting their assignment.

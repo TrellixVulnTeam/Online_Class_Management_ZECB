@@ -13,6 +13,8 @@ meetingId = 83781439159
 userId = 'me'
 
 # create a function to generate a token using the pyjwt library
+
+
 def generateToken():
     return jwt.encode(
         # Create a payload of the token containing API Key & expiration time
@@ -25,20 +27,21 @@ def generateToken():
     )
     # send a request with headers including a token
 
-#fetching zoom meeting info now of the user, i.e, YOU
+# fetching zoom meeting info now of the user, i.e, YOU
+
+
 def getUsers():
     headers = {
         'authorization': f'Bearer {generateToken()}',
         'content-type': 'application/json',
     }
 
-
     r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
     print("\n fetching zoom meeting info now of the user ... \n")
     print(r.text)
 
 
-#fetching zoom meeting participants of the live meeting
+# fetching zoom meeting participants of the live meeting
 
 def getMeetingParticipants():
     headers = {
@@ -75,24 +78,31 @@ meetingdetails = {"topic": "The title of your zoom meeting",
                                "mute_upon_entry": "False",
                                "watermark": "true",
                                "audio": "voip",
-                               "auto_recording": "cloud"
+                               "auto_recording": "cloud",
+                               "waiting_room": "False",
+                               "show_share_button": "true",
+                               #    "who_can_share_screen":"all",
+                               #    "who_can_share_screen_when_someone_is_sharing":"all",
+                                "screen_sharing": "true"
                                }
                   }
 
-def createMeeting():  # sourcery skip: avoid-builtin-shadow
+
+def createMeeting(meetingName):  # sourcery skip: avoid-builtin-shadow
     headers = {
         'authorization': f'Bearer {generateToken()}',
         'content-type': 'application/json',
     }
-
+    meetingdetails["topic"] = meetingName
     r = requests.post(
         f'https://api.zoom.us/v2/users/{userId}/meetings', headers=headers, data=json.dumps(meetingdetails))
 
     print("\n creating zoom meeting ... \n")
     dict = r.json()
     # print(r.text)
-    print(dict["join_url"])
+    # print(dict["start_url"])
     return dict["join_url"]
+
 
 if __name__ == '__main__':
 

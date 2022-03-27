@@ -2,7 +2,7 @@ from datetime import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from classroom.models import User,Teacher,Student,StudentMarks,MessageToTeacher,ClassNotice,ClassAssignment,SubmitAssignment,LiveClass
+from classroom.models import User,Teacher,Student,StudentMarks,MessageToTeacher,ClassNotice,ClassAssignment,SubmitAssignment,LiveClass,ClassTest, ClassMaterial
 from django.db import transaction
 
 
@@ -92,10 +92,31 @@ class AssignmentForm(forms.ModelForm):
                 'Deadline' : DateInput(),
                 }
 
+
+## Form for uploading or updating assignment (teachers only)       
+class MaterialForm(forms.ModelForm):
+    class Meta():
+        model = ClassMaterial
+        fields = ['material_name','material']
+
 class LiveClassForm(forms.ModelForm):
     class Meta():
         model = LiveClass
         fields = ['ClassName', 'StartTime','EndTime']
+        widgets = {
+                # 'Deadline' : DateInput(),
+                # 'PublishedAt' : forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S', attrs={'class':'datetimefield'}),
+                # 'Deadline' : forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S', attrs={'class':'datetimefield'}),
+                # 'hiddenstatus' : forms.CheckboxInput(attrs={'class':'answer'})
+                'StartTime' : DateInput(),
+                'EndTime' : DateInput(),
+                }
+
+
+class ClassTestForm(forms.ModelForm):
+    class Meta():
+        model = ClassTest
+        fields = ['TestName', 'StartTime','EndTime', 'Testlink']
         widgets = {
                 # 'Deadline' : DateInput(),
                 # 'PublishedAt' : forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S', attrs={'class':'datetimefield'}),
