@@ -38,6 +38,7 @@ def TeacherSignUp(request):
 
             registered = _extracted_from_TeacherSignUp_11(user_form, teacher_profile_form)
         else:
+            # messages.error(request, user_form.errors, teacher_profile_form.errors)
             print(user_form.errors, teacher_profile_form.errors)
     else:
         user_form = UserForm()

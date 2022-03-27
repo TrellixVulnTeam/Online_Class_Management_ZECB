@@ -31,6 +31,24 @@
       <p> {{ user_form.password1.help_text }} </p>
       <p> <label for="">{{ user_form.password2.label_tag }}</label>{{ user_form.password2 }}</p>
       <p> {{ user_form.password2.help_text }} </p>
+      {% if user_form.errors %}
+      {% for field in user_form %}
+          {% for error in field.errors %} 
+             <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+             </div>
+          {% endfor %}
+      {% endfor %}
+   {% endif %}
+      {% if teacher_profile_form.errors %}
+      {% for field in teacher_profile_form %}
+          {% for error in field.errors %} 
+             <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+             </div>
+          {% endfor %}
+      {% endfor %}
+   {% endif %}
       <input type="submit" name="" value="Sign Up">
     </form>
     <a href="{% url 'classroom:login' %}">Already have an account.</a>
