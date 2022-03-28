@@ -30,7 +30,7 @@ DEBUG = True
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','kgp-learnings.herokuapp.com/']
 
 AUTH_USER_MODEL = 'classroom.User'
 
