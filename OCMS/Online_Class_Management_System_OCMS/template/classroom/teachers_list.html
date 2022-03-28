@@ -15,11 +15,7 @@
             {% if teacher.teacher_profile_pic %}
             <img src="{{ teacher.teacher_profile_pic.url }}" alt="Image not found">
             {% else %}
-            {% if forloop.counter0|divisibleby:"2" %}
             <img src="{% static 'images/login-avatar.PNG' %}" alt="Image not found">
-            {% else %}
-            <img src="{% static 'images/login-avatar.PNG' %}" alt="Image not found">
-            {% endif %}
             {% endif %}
           </div>
           <div class="content">

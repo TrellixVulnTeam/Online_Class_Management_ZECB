@@ -25,11 +25,7 @@
             {% if student.student_profile_pic %}
             <img src="{{ student.student_profile_pic.url }}" alt="">
             {% else %}
-            {% if forloop.counter0|divisibleby:"2" %}
             <img src="{% static 'images/login-avatar.PNG' %}" alt="">
-            {% else %}
-            <img src="{% static 'images/login-avatar.PNG' %}" alt="">
-            {% endif %}
             {% endif %}
           </div>
           <div class="content">

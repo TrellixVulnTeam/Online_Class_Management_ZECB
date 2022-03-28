@@ -443,9 +443,9 @@ def schedule_class(request):
         form = LiveClassForm(request.POST, request.FILES)
         if form.is_valid():
             liveclass.getUsers()
-            # print(form.fields['Classlink'])
+            print(form['ClassName'].value())
             upload = form.save(commit=False)
-            upload.Classlink = liveclass.createMeeting(str(form.fields['ClassName']))
+            upload.Classlink = liveclass.createMeeting(form['ClassName'].value())
             upload.teacher = teacher
             students = Student.objects.filter(user_student_name__teacher=request.user.Teacher)
             upload.save()

@@ -1,6 +1,6 @@
-import jwt
-import requests
 import json
+import requests
+import jwt
 from time import time
 
 API_KEY = 'm8mpOJZ8QIakPgQ89ENtIw'
@@ -73,12 +73,12 @@ meetingdetails = {"topic": "The title of your zoom meeting",
                                  "repeat_interval": 1
                                  },
                   "settings": {"host_video": "False",
-                               "participant_video": "true",
                                "join_before_host": "true",
-                               "mute_upon_entry": "False",
                                "watermark": "true",
+                               "participant_video": "true",
                                "audio": "voip",
                                "auto_recording": "cloud",
+                               "mute_upon_entry": "False",
                                "waiting_room": "False",
                                "show_share_button": "true",
                                #    "who_can_share_screen":"all",
@@ -90,8 +90,8 @@ meetingdetails = {"topic": "The title of your zoom meeting",
 
 def createMeeting(meetingName):  # sourcery skip: avoid-builtin-shadow
     headers = {
-        'authorization': f'Bearer {generateToken()}',
         'content-type': 'application/json',
+        'authorization': f'Bearer {generateToken()}',
     }
     meetingdetails["topic"] = meetingName
     r = requests.post(
