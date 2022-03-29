@@ -11,7 +11,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
 # Create your views here.
 from classroom.forms import UserForm, TeacherProfileForm, StudentProfileForm, MarksForm, MessageForm, NoticeForm, AssignmentForm, SubmitForm, TeacherProfileUpdateForm, StudentProfileUpdateForm, LiveClassForm, ClassTestForm, MaterialForm
 from django.urls import reverse
@@ -36,7 +35,8 @@ def TeacherSignUp(request):
 
         if user_form.is_valid() and teacher_profile_form.is_valid():
 
-            registered = _extracted_from_TeacherSignUp_11(user_form, teacher_profile_form)
+            registered = _extracted_from_TeacherSignUp_11(
+                user_form, teacher_profile_form)
         else:
             # messages.error(request, user_form.errors, teacher_profile_form.errors)
             print(user_form.errors, teacher_profile_form.errors)
@@ -71,7 +71,8 @@ def StudentSignUp(request):
 
         if user_form.is_valid() and student_profile_form.is_valid():
 
-            registered = _extracted_from_StudentSignUp_11(user_form, student_profile_form)
+            registered = _extracted_from_StudentSignUp_11(
+                user_form, student_profile_form)
         else:
             print(user_form.errors, student_profile_form.errors)
     else:
@@ -339,7 +340,8 @@ class add_student(LoginRequiredMixin, generic.RedirectView):
             messages.warning(
                 self.request, 'warning, Student already in class!')
         else:
-            messages.success(self.request, f'{student.name} successfully added!')
+            messages.success(
+                self.request, f'{student.name} successfully added!')
 
         return super().get(request, *args, **kwargs)
 
@@ -445,9 +447,11 @@ def schedule_class(request):
             liveclass.getUsers()
             print(form['ClassName'].value())
             upload = form.save(commit=False)
-            upload.Classlink = liveclass.createMeeting(form['ClassName'].value())
+            upload.Classlink = liveclass.createMeeting(
+                form['ClassName'].value())
             upload.teacher = teacher
-            students = Student.objects.filter(user_student_name__teacher=request.user.Teacher)
+            students = Student.objects.filter(
+                user_student_name__teacher=request.user.Teacher)
             upload.save()
             upload.student.add(*students)
             class_scheduled = True
@@ -470,7 +474,8 @@ def schedule_test(request):
         if form.is_valid():
             upload = form.save(commit=False)
             upload.teacher = teacher
-            students = Student.objects.filter(user_student_name__teacher=request.user.Teacher)
+            students = Student.objects.filter(
+                user_student_name__teacher=request.user.Teacher)
             upload.save()
             upload.student.add(*students)
             test_scheduled = True
@@ -678,7 +683,7 @@ def liveClass_delete(request, id=None):
         obj.delete()
         messages.success(request, "Class deleted successfully")
         return redirect('classroom:liveClass_list')
-        
+
     context = {
         "object": obj,
     }
@@ -696,7 +701,7 @@ def classTest_delete(request, id=None):
         obj.delete()
         messages.success(request, "Test deleted successfully")
         return redirect('classroom:classTest_list')
-        
+
     context = {
         "object": obj,
     }

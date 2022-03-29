@@ -1,28 +1,27 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
-from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 import misaka
 # Create your models here.
 
 class User(AbstractUser):
-    is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
 
 
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True,related_name='Student')
     name=models.CharField(max_length=250)
-    roll_no = models.CharField(max_length=50)
     email = models.EmailField(max_length=254)
+    roll_no = models.CharField(max_length=50)
     phone = models.IntegerField()
     student_profile_pic = models.ImageField(upload_to="classroom/student_profile_pic",blank=True)
 
-    def get_absolute_url(self):
-        return reverse('classroom:student_detail',kwargs={'pk':self.pk})
-
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('classroom:student_detail',kwargs={'pk':self.pk})
 
     class Meta:
         ordering = ['roll_no']
@@ -45,9 +44,9 @@ class Teacher(models.Model):
 class StudentMarks(models.Model):
     teacher = models.ForeignKey(Teacher,related_name='given_marks',on_delete=models.CASCADE)
     student = models.ForeignKey(Student,related_name="marks",on_delete=models.CASCADE)
-    subject_name = models.CharField(max_length=250)
     marks_obtained = models.IntegerField()
     maximum_marks = models.IntegerField()
+    subject_name = models.CharField(max_length=250)
 
     def __str__(self):
         return self.subject_name
@@ -95,14 +94,14 @@ class ClassNotice(models.Model):
         super().save(*args,**kwargs)
 
     class Meta:
-        ordering = ['-created_at']
         unique_together = ['teacher','message']
+        ordering = ['-created_at']
 
 class ClassAssignment(models.Model):
     student = models.ManyToManyField(Student,related_name='student_assignment')
     teacher = models.ForeignKey(Teacher,related_name='teacher_assignment',on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now=True)
     assignment_name = models.CharField(max_length=250)
+    created_at = models.DateTimeField(auto_now=True)
     assignment = models.FileField(upload_to='assignments')
     PublishedAt = models.DateTimeField(auto_now=False, null=True)
     Deadline = models.DateTimeField(auto_now=False, null=True)
@@ -130,10 +129,10 @@ class LiveClass(models.Model):
     student = models.ManyToManyField(Student,related_name='student_liveClass')
     teacher = models.ForeignKey(Teacher,related_name='teacher_liveClass',on_delete=models.CASCADE, default=None)
     created_at = models.DateTimeField(auto_now=True)
-    ClassName = models.CharField(max_length=250)
-    Classlink = models.CharField(max_length=250)
     StartTime = models.DateTimeField(auto_now=False, null=True)
     EndTime = models.DateTimeField(auto_now=False, null=True)
+    ClassName = models.CharField(max_length=250)
+    Classlink = models.CharField(max_length=250)
     def __str__(self):
         return self.ClassName
 

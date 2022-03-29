@@ -1,9 +1,7 @@
-from datetime import datetime
 from django import forms
+from classroom.models import User,Teacher,Student,StudentMarks,MessageToTeacher,ClassNotice,ClassAssignment,SubmitAssignment,LiveClass,ClassTest, ClassMaterial
 from django.contrib.auth.forms import UserCreationForm
 
-from classroom.models import User,Teacher,Student,StudentMarks,MessageToTeacher,ClassNotice,ClassAssignment,SubmitAssignment,LiveClass,ClassTest, ClassMaterial
-from django.db import transaction
 
 
 ## User Login Form (Applied in both student and teacher login)
@@ -21,12 +19,12 @@ class UserForm(UserCreationForm):
 class TeacherProfileForm(forms.ModelForm):
     class Meta():
         model =  Teacher
-        fields = ['name','subject_name','phone','email']
+        fields = ['name','phone','email','subject_name']
         widgets = {
                 'name': forms.TextInput(attrs={'class':'answer'}),
-                'subject_name': forms.TextInput(attrs={'class':'answer'}),
-                'phone': forms.NumberInput(attrs={'class':'answer'}),
                 'email': forms.EmailInput(attrs={'class':'answer'}),
+                'phone': forms.NumberInput(attrs={'class':'answer'}),
+                'subject_name': forms.TextInput(attrs={'class':'answer'}),
                 }
 
 ## Teacher Profile Update Form
@@ -53,11 +51,6 @@ class StudentProfileUpdateForm(forms.ModelForm):
         model = Student
         fields = ['name','roll_no','email','phone','student_profile_pic']
         
-## Form for uploading marks and also for updating it.
-class MarksForm(forms.ModelForm):
-    class Meta():
-        model = StudentMarks
-        fields = ['subject_name','marks_obtained','maximum_marks']
 
 ## Writing message to teacher        
 class MessageForm(forms.ModelForm):
@@ -92,6 +85,12 @@ class AssignmentForm(forms.ModelForm):
                 'Deadline' : DateInput(),
                 }
 
+
+## Form for uploading marks and also for updating it.
+class MarksForm(forms.ModelForm):
+    class Meta():
+        model = StudentMarks
+        fields = ['subject_name','marks_obtained','maximum_marks']
 
 ## Form for uploading or updating assignment (teachers only)       
 class MaterialForm(forms.ModelForm):

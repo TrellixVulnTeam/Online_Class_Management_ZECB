@@ -6,11 +6,11 @@ from time import time
 API_KEY = 'm8mpOJZ8QIakPgQ89ENtIw'
 API_SEC = 'aid1os9JE1sca9zclNNu809x5DFybYLBZTLP'
 
-# your zoom live meeting id, it is optional though
-meetingId = 83781439159
 
 # userId = 'you can get your user Id by running the getusers()'
 userId = 'me'
+# your zoom live meeting id, it is optional though
+meetingId = 83781439159
 
 # create a function to generate a token using the pyjwt library
 
@@ -64,9 +64,9 @@ def getMeetingParticipants():
 
 meetingdetails = {"topic": "The title of your zoom meeting",
                   "type": 2,
-                  "start_time": "2019-06-14T10: 21: 57",
                   "duration": "45",
                   "timezone": "Europe/Madrid",
+                  "start_time": "2019-06-14T10: 21: 57",
                   "agenda": "test",
 
                   "recurrence": {"type": 1,
@@ -81,7 +81,7 @@ meetingdetails = {"topic": "The title of your zoom meeting",
                                "mute_upon_entry": "False",
                                "waiting_room": "False",
                                "show_share_button": "true",
-                                "who_can_share_screen":"all",
+                                "who_can_share_screen": "all",
                                #    "who_can_share_screen_when_someone_is_sharing":"all",
                                 "screen_sharing": "true"
                                }
@@ -102,14 +102,3 @@ def createMeeting(meetingName):  # sourcery skip: avoid-builtin-shadow
     # print(r.text)
     # print(dict["start_url"])
     return dict["join_url"]
-
-
-if __name__ == '__main__':
-
-    getUsers()
-    # getMeetingParticipants()
-    createMeeting()
-
-###################################
-# hire me pls ;(
-###################################
