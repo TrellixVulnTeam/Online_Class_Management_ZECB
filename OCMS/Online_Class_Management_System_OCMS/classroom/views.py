@@ -117,6 +117,7 @@ def user_login(request):
     if user := authenticate(username=username, password=password):
         if user.is_active:
             login(request, user)
+            messages.success(request, 'Logged in successfully!')
             return HttpResponseRedirect(reverse('home'))
 
         else:

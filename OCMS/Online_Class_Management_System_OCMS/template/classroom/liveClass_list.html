@@ -36,7 +36,7 @@
           <td>{{ class.ClassName }}</td>
           <td>{{ class.StartTime }}</td>
           <td>{{ class.EndTime }}</td>
-          <td><a href="{{ class.Classlink }}" class="btn btn-primary">Link</a></td>
+          <td><a href="{{ class.Classlink }}" target="_blank" class="btn btn-primary">Link</a></td>
           {% comment %} <td><a href="{% url 'classroom:update_assignment' id=assignment.id %}" class="btn btn-primary"
               target="_blank">Update</a></td>{% endcomment %}
           <td><a href="{% url 'classroom:liveClass_delete' id=class.id %}" class="btn btn-danger">Delete</a></td>
