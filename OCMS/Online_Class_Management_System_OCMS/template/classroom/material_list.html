@@ -14,22 +14,22 @@
 
 <div class="container">
   <div class="jumbotron">
-{% if teacher.teacher_material.count == 0 %}
-  <h2>No Study Material / Lecture Uploaded Yet</h2>
-{% else %}
-  <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Uploaded At</th>
-        <th scope="col">Download</th>
-        <th scope="col">Update</th>
-        <th scope="col">Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for material in teacher.teacher_material.all %}
+    {% if teacher.teacher_material.count == 0 %}
+    <h2>No Study Material / Lecture Uploaded Yet</h2>
+    {% else %}
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Uploaded At</th>
+          <th scope="col">Download</th>
+          <th scope="col">Update</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for material in teacher.teacher_material.all %}
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
           <td>{{ material.material_name }}</td>
@@ -38,10 +38,10 @@
           <td><a href="{% url 'classroom:update_material' id=material.id %}" class="btn btn-primary">Update</a></td>
           <td><a href="{% url 'classroom:material_delete' id=material.id %}" class="btn btn-danger">Delete</a></td>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
-</div>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

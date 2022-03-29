@@ -22,9 +22,9 @@
         {% for class in student.student_liveClass.all %}
         {% comment %} {% if PublishedAt|date:"YmdHis" < now|date:"YmdHis" %}<td>{{ class.teacher }}</td>{% endif %}
           {% endcomment %}
-           {% comment %} {% if class.EndTime.date >= currentDateTime.date and class.EndTime.time
-            >=currentDateTime.time %}  {% endcomment %}
-            <tr> 
+          {% comment %} {% if class.EndTime.date >= currentDateTime.date and class.EndTime.time
+          >=currentDateTime.time %} {% endcomment %}
+          <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ class.ClassName }}</td>
             <td>{{ class.teacher }}</td>
@@ -32,10 +32,10 @@
             <td>{{ class.StartTime }}</td>
             <td>{{ class.EndTime }}</td>
             <td><a href="{{ class.Classlink }}" class="btn btn-primary" target="_blank">Link</a></td>
-            </tr>
-            {% comment %} {%else%} {% endcomment %}
-            {% comment %} {% endif %} {% endcomment %}
-            {% endfor %}
+          </tr>
+          {% comment %} {%else%} {% endcomment %}
+          {% comment %} {% endif %} {% endcomment %}
+          {% endfor %}
       </tbody>
     </table>
     {% endif %}

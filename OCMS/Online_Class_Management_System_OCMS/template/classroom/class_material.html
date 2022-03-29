@@ -4,21 +4,21 @@
 <div class="container">
   <div class="jumbotron">
 
-{% if student.student_material.count == 0 %}
-  <h2>No Study Material / Lecture Yet</h2>
-{% else %}
-  <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Uploaded By</th>
-        <th scope="col">Uploaded At</th>
-        <th scope="col">Download</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for material in student.student_material.all %}
+    {% if student.student_material.count == 0 %}
+    <h2>No Study Material / Lecture Yet</h2>
+    {% else %}
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Uploaded By</th>
+          <th scope="col">Uploaded At</th>
+          <th scope="col">Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for material in student.student_material.all %}
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
           <td>{{ material.material_name }}</td>
@@ -29,10 +29,10 @@
 
         </tr>
 
-      {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
-</div>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

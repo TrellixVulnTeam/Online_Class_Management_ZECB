@@ -1,4 +1,4 @@
-from .models import ClassTest, User,Student,StudentMarks,Teacher,StudentsInClass,LiveClass
+from .models import ClassTest, User, Student, StudentMarks, Teacher, StudentsInClass, LiveClass
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 # Register your models here.
