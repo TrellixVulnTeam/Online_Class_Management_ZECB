@@ -81,7 +81,7 @@ meetingdetails = {"topic": "The title of your zoom meeting",
                                "mute_upon_entry": "False",
                                "waiting_room": "False",
                                "show_share_button": "true",
-                               #    "who_can_share_screen":"all",
+                                "who_can_share_screen":"all",
                                #    "who_can_share_screen_when_someone_is_sharing":"all",
                                 "screen_sharing": "true"
                                }
