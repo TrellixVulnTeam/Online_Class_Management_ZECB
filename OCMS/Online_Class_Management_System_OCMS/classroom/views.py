@@ -117,7 +117,6 @@ def user_login(request):
     if user := authenticate(username=username, password=password):
         if user.is_active:
             login(request, user)
-            messages.success(request, 'Logged in successfully!')
             return HttpResponseRedirect(reverse('home'))
 
         else:
@@ -445,11 +444,10 @@ def schedule_class(request):
     else:
         form = LiveClassForm(request.POST, request.FILES)
         if form.is_valid():
-            liveclass.getUsers()
             print(form['ClassName'].value())
             upload = form.save(commit=False)
             upload.Classlink = liveclass.createMeeting(
-                form['ClassName'].value())
+                meetingName=form['ClassName'].value(), Email=teacher.email)
             upload.teacher = teacher
             students = Student.objects.filter(
                 user_student_name__teacher=request.user.Teacher)
